@@ -17,10 +17,12 @@ namespace RegistrationForEuvic.Models.DTOs
         [Unicode(false)]
         public string Surname { get; set; } = null!;
         [Required]
+        [EmailAddress]
         [StringLength(320)]
         [Unicode(false)]
         public string Email { get; set; } = null!;
         [Required]
+        [PeselValid]
         [StringLength(11)]
         [Unicode(false)]
         public string Pesel { get; set; } = null!;
@@ -29,6 +31,7 @@ namespace RegistrationForEuvic.Models.DTOs
         [Unicode(false)]
         public string Password { get; set; } = null!;
         [Required]
+        [PhoneValid]
         [StringLength(15)]
         [Unicode(false)]
         public string PhoneNumber { get; set; } = null!;
