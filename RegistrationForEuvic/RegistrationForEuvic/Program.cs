@@ -17,7 +17,17 @@ builder.Services.AddDbContext<UserDbContext>(options => options.UseSqlServer(con
 
 var app = builder.Build();
 
-
+using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
+{
+    using (var context = serviceScope.ServiceProvider.GetRequiredService<UserDbContext>())
+    {
+        bool state = context.Database.CanConnect();
+        if (!state)
+        {
+            context.Database.EnsureCreated();
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
