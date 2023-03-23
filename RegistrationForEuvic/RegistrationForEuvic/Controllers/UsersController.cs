@@ -100,7 +100,7 @@ namespace RegistrationForEuvic.Controllers
             {
                 return BadRequest("Wrong input format");
             }
-            //checking if its a new user--> checking if PESEL, email and phone number is unique 
+            //checking if its a new user--> checking if PESEL, email and phone number are unique 
             if (!UniqueEmail(_userDto.Email))
             {
                 return BadRequest("Email is not unique");
@@ -118,6 +118,9 @@ namespace RegistrationForEuvic.Controllers
             //password hashing
             PasswordManager passManager = new PasswordManager(_userDto.Password);
             _userDto.Password = passManager.ComputedHashedPassword;
+
+            //phone numbers are stored in db WITHOUT seperators
+            _userDto.PhoneNumber = TransformToNoSepartorNumber(_userDto.PhoneNumber, ' ', '-');
 
             User user = UserMapper.RegisterDtoToUser(ref _userDto, ref newId);
             //for future login
@@ -171,6 +174,37 @@ namespace RegistrationForEuvic.Controllers
             }
 
             return _context.Users.Max(x => x.UserId) + 1;
+        }
+
+        /// <summary>
+        /// Deletes all separators from phone number.
+        /// Assumption: each number have ONLYONE type of separator.
+        /// </summary>
+        /// <param name="phoneNumber">phone number with no separators</param>
+        /// <param name="separtors">array of separtors</param>
+        /// <returns></returns>
+        private string TransformToNoSepartorNumber(string phoneNumber, params char[] separtors)
+        {
+            string noSparators = String.Empty;
+            char? existingSeparator = null;
+
+            foreach (char separator in separtors)
+            {
+                if (phoneNumber.Any(x => x == separator))
+                {
+                    existingSeparator = separator;
+                    break;
+                }
+            }
+            if (existingSeparator == null)
+            {
+                return phoneNumber;
+            }
+
+            string[] subNumbers = phoneNumber.Split((char)existingSeparator);
+            noSparators = String.Join("", subNumbers);
+
+            return noSparators;
         }
 
         private bool UniqueEmail(String email)
