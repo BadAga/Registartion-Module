@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Globalization;
 
-namespace RegistrationForEuvic.Models.Validators
+namespace RegistrationForEuvic.Validators
 {
     public class PeselValid:ValidationAttribute
     {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace RegistrationForEuvic.Models.Validators
+namespace RegistrationForEuvic.Validators
 {
     public class PhoneValid:ValidationAttribute
     {

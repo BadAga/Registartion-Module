@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using RegistrationForEuvic.Models.Validators;
+using RegistrationForEuvic.Validators;
 
 namespace RegistrationForEuvic_Test
 {
