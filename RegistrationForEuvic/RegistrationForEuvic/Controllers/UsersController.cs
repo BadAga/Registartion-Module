@@ -207,16 +207,31 @@ namespace RegistrationForEuvic.Controllers
             return noSparators;
         }
 
+        /// <summary>
+        /// Checks if passed email value already exists in database
+        /// </summary>
+        /// <param name="email">email value</param>
+        /// <returns>true if email is unique</returns>
         private bool UniqueEmail(String email)
         {
             return !_context.Users.Any(x => x.Email == email);
         }
 
+        /// <summary>
+        /// Checks if passed PESEL number value already exists in database
+        /// </summary>
+        /// <param name="pesel">PESEL number value</param>
+        /// <returns>true if passed value is unique</returns>
         private bool UniquePesel(String pesel)
         {
             return !_context.Users.Any(x => x.Pesel == pesel);
         }
 
+        /// <summary>
+        /// Checks if passed phone number value already exists in database
+        /// </summary>
+        /// <param name="phoneNumber">phone number value</param>
+        /// <returns>true if passed value is unique</returns>
         private bool UniquePhoneNumber(String phoneNumber)
         {
             return !_context.Users.Any(x => x.PhoneNumber == phoneNumber);

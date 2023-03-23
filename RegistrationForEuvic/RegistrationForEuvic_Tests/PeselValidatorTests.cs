@@ -9,59 +9,42 @@ namespace RegistrationForEuvic_Test
         public void PeselValid_WrongLength_LengthShouldBe11()
         {
             PeselValid peselValid = new PeselValid();
+            bool[] testCases = {peselValid.IsValid("1234567891655656565"),
+                                peselValid.IsValid("123456"),
 
-            string testedPesel1= "1234567891655656565";
-            string testedPesel2 = "123456";
-            string testedPesel3 = "68082095213";
+                                peselValid.IsValid("68082095213")};
 
-            bool result = peselValid.IsValid(testedPesel1);
-            bool result2 = peselValid.IsValid(testedPesel2);
-            bool result3 = peselValid.IsValid(testedPesel3);
-
-            Assert.False(result);
-            Assert.False(result2);
-            Assert.True(result3);
+            bool[] expectedResults = { false, false, true };
+            Assert.Equal(expectedResults, testCases);
         }
 
         [Fact]
         public void PeselValid_WrongCharacters_CharacterstMustBeOnlyDigits()
         {
             PeselValid peselValid = new PeselValid();
+            bool[] testCases = {peselValid.IsValid("123456k7896"),
+                                peselValid.IsValid("126  6a7891"),
+                                peselValid.IsValid("123/?6a7891"),
 
-            string testedPesel1 = "123456k7896";
-            string testedPesel2 = "126  6a7891";
-            string testedPesel3 = "123/?6a7891";
-            string testedPesel4 = "85120449896";
+                                peselValid.IsValid("85120449896")};
 
-            bool result = peselValid.IsValid(testedPesel1);
-            bool result2 = peselValid.IsValid(testedPesel2);
-            bool result3= peselValid.IsValid(testedPesel3);
-            bool result4 = peselValid.IsValid(testedPesel4);
-
-            Assert.False(result);
-            Assert.False(result2);
-            Assert.False(result3);
-            Assert.True(result4);
+            bool[] expectedResults = { false, false, false, true };
+            Assert.Equal(expectedResults, testCases);
         }
 
         [Fact]
         public void PeselValid_InocrrectControlNumber_ShouldReturnFalse()
         {
             PeselValid peselValid = new PeselValid();
-            string testedPesel1 = "85091029933";
-            string testedPesel2 = "99031769287";
-            string testedPesel3 = "49080193781";
-            string testedPesel4 = "72040747634";
 
-            bool result = peselValid.IsValid(testedPesel1);
-            bool result2 = peselValid.IsValid(testedPesel2);
-            bool result3 = peselValid.IsValid(testedPesel3);
-            bool result4 = peselValid.IsValid(testedPesel4);
+            bool[] testCases = {peselValid.IsValid("85091029933"),
+                                peselValid.IsValid("99031769287"),
+                                peselValid.IsValid("49080193781"),
 
-            Assert.False(result);
-            Assert.False(result2);
-            Assert.False(result3);
-            Assert.True(result4);
+                                peselValid.IsValid("72040747634")};
+
+            bool[] expectedResults = { false, false, false, true };
+            Assert.Equal(expectedResults, testCases);
         }
 
         [Fact]
@@ -73,10 +56,10 @@ namespace RegistrationForEuvic_Test
             string testedPesel3 = "123456";
 
             ValidationContext validationContext = new ValidationContext(testedPesel1);
-            ValidationResult validationResult = peselValid.GetValidationResult(testedPesel1,validationContext);
+            ValidationResult validationResult = peselValid.GetValidationResult(testedPesel1, validationContext);
 
             Assert.Equal("Incorrect PESEL", validationResult.ErrorMessage);
- 
+
 
             validationContext = new ValidationContext(testedPesel2);
             validationResult = peselValid.GetValidationResult(testedPesel2, validationContext);
