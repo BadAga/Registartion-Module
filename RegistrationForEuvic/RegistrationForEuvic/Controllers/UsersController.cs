@@ -122,6 +122,13 @@ namespace RegistrationForEuvic.Controllers
             //phone numbers are stored in db WITHOUT seperators
             _userDto.PhoneNumber = TransformToNoSepartorNumber(_userDto.PhoneNumber, ' ', '-');
 
+            //get the age
+            int computedAge=GetAgeBasedOnPesel(_userDto.Pesel);
+            if(_userDto.Age!=computedAge)
+            {
+                _userDto.Age = computedAge;
+            }
+
             User user = UserMapper.RegisterDtoToUser(ref _userDto, ref newId);
             //for future login
             user.Salt = passManager.Salt;
@@ -235,6 +242,38 @@ namespace RegistrationForEuvic.Controllers
         private bool UniquePhoneNumber(String phoneNumber)
         {
             return !_context.Users.Any(x => x.PhoneNumber == phoneNumber);
+        }
+
+        /// <summary>
+        /// Return the age of person based on their PESEL number
+        /// based on: https://www.gov.pl/web/cyfryzacja/co-to-jest-numer-pesel-i-jak-sie-go-nadaje
+        /// </summary>
+        /// <param name="peselNumber">valid PESEL number value</param>
+        /// <returns>age</returns>
+        private int GetAgeBasedOnPesel(string peselNumber)
+        {
+            int birthYear = (peselNumber[0]-'0')*10+ peselNumber[1] - '0';
+            int birthMonth = (peselNumber[2] - '0') * 10 + peselNumber[3] - '0';
+            int birthDay = (peselNumber[4] - '0') * 10 + peselNumber[5] - '0';
+            if (birthMonth>12)//this means that the personwasporn after 2000
+            {
+                birthYear +=2000;
+                birthMonth -= 20;
+            }
+            else
+            {
+                birthYear += 1900;
+            }
+            int currentYear = DateTime.Now.Year;
+            int currentMonth = DateTime.Now.Month;
+            int currentDay = DateTime.Now.Day;
+            //are thay before their birthday?
+            if ((currentMonth<birthMonth)||
+                ((currentMonth == birthMonth)&& (currentDay < birthDay)))
+            {
+                return currentYear - birthYear-1;
+            }
+            return currentYear-birthYear;
         }
     }
 

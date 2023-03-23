@@ -53,5 +53,5 @@ public partial class User
     [StringLength(150)]
     [Unicode(false)]
     public string Salt { get; set; } = null!;
-    public float? PowerUsageAvg { get; set; }
+    public double? PowerUsageAvg { get; set; }
 }
