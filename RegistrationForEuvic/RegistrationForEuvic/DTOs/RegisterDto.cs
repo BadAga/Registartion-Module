@@ -38,6 +38,6 @@ namespace RegistrationForEuvic.Models.DTOs
         [Unicode(false)]
         public string PhoneNumber { get; set; } = null!;
         public int? Age { get; set; }
-        public float? PowerUsageAvg { get; set; } = 0;
+        public double? PowerUsageAvg { get; set; }
     }
 }
