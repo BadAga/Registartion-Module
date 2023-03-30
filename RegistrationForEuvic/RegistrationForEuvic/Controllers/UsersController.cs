@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +18,18 @@ namespace RegistrationForEuvic.Controllers
 
     public class UsersController : ControllerBase
     {
+
+        private IConfiguration _config;
         private readonly UserDbContext _context;
 
-        public UsersController(UserDbContext context)
+        public UsersController( IConfiguration config ,UserDbContext context)
         {
+            _config = config;
             _context = context;
         }
 
         // GET: api/Users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -32,6 +37,7 @@ namespace RegistrationForEuvic.Controllers
         }
 
         // POST: api/Users/Login
+        [Authorize]
         [HttpPost]
         [Route("Login")]
         public async Task<ActionResult<User>> GetUser([FromBody] LoginDto loginDto)
@@ -92,6 +98,7 @@ namespace RegistrationForEuvic.Controllers
 
         // POST: api/Users/Register
         [HttpPost]
+        [AllowAnonymous]
         [Route("Register")]
         public async Task<ActionResult<User>> Register([FromBody] RegisterDto _userDto)
         {
@@ -123,12 +130,12 @@ namespace RegistrationForEuvic.Controllers
             _userDto.PhoneNumber = UserInputManager.FormatToNoSepartorNumber(_userDto.PhoneNumber, ' ', '-');
 
             //get the age
-            int computedAge= UserInputManager.GetAgeBasedOnPesel(_userDto.Pesel);
+            int computedAge = UserInputManager.GetAgeBasedOnPesel(_userDto.Pesel);
 
             //get formated power usage
-            _userDto.PowerUsageAvg =UserInputManager.FormatPowerUsage(_userDto.PowerUsageAvg);
+            _userDto.PowerUsageAvg = UserInputManager.FormatPowerUsage(_userDto.PowerUsageAvg);
 
-            if(_userDto.Age!=computedAge)
+            if (_userDto.Age != computedAge)
             {
                 _userDto.Age = computedAge;
             }
@@ -155,7 +162,11 @@ namespace RegistrationForEuvic.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            string key = _config["Jwt:Key"];
+            string token = UserTokenManager.GenerateToken(ref user, ref key);
+
+            return Ok(token);
+
         }
 
         // DELETE: api/Users/5
