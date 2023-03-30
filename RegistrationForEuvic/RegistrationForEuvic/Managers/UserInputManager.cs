@@ -1,8 +1,8 @@
 ﻿using Microsoft.Identity.Client;
 
-namespace RegistrationForEuvic
+namespace RegistrationForEuvic.Managers
 {
-    public class UserInputFormater
+    public class UserInputManager
     {
         /// <summary>
         /// Formats passed value to a number with 3 decimal precision
@@ -15,7 +15,7 @@ namespace RegistrationForEuvic
             try
             {
                 decimal temp = new decimal((double)userInput);
-                temp = Decimal.Round(temp, 3);
+                temp = decimal.Round(temp, 3);
                 formated = (double)temp;
             }
             catch (Exception e)
@@ -49,8 +49,8 @@ namespace RegistrationForEuvic
             int currentMonth = DateTime.Now.Month;
             int currentDay = DateTime.Now.Day;
             //are thay before their birthday?
-            if ((currentMonth < birthMonth) ||
-                ((currentMonth == birthMonth) && (currentDay < birthDay)))
+            if (currentMonth < birthMonth ||
+                currentMonth == birthMonth && currentDay < birthDay)
             {
                 return currentYear - birthYear - 1;
             }
@@ -66,7 +66,7 @@ namespace RegistrationForEuvic
         /// <returns>phone number with no separators</returns>
         public static string FormatToNoSepartorNumber(string phoneNumber, params char[] separtors)
         {
-            string noSparators = String.Empty;
+            string noSparators = string.Empty;
             char? existingSeparator = null;
 
             foreach (char separator in separtors)
@@ -83,7 +83,7 @@ namespace RegistrationForEuvic
             }
 
             string[] subNumbers = phoneNumber.Split((char)existingSeparator);
-            noSparators = String.Join("", subNumbers);
+            noSparators = string.Join("", subNumbers);
 
             return noSparators;
         }

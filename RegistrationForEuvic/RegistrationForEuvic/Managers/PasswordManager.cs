@@ -1,11 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace RegistrationForEuvic.Models.Password_Manager
-{ 
+namespace RegistrationForEuvic.Managers
+{
     public class PasswordManager
     {
-        readonly String plainPassword;        
+        readonly string plainPassword;
 
         readonly string salt;
         public string Salt { get { return salt; } }
@@ -13,32 +13,32 @@ namespace RegistrationForEuvic.Models.Password_Manager
         string computedHashedPassword;
         public string ComputedHashedPassword { get { return computedHashedPassword; } }
 
-        readonly HashAlgorithmName algorithm=HashAlgorithmName.SHA384;
-       
+        readonly HashAlgorithmName algorithm = HashAlgorithmName.SHA384;
+
         //keySize value should align with hash size of used algorithm (bytes)
         //SHA384 produces a 48-byte hash value
-        const int keySize=48;
+        const int keySize = 48;
 
         const int iterations = 100_000;
-               
+
         //this constructor is used for registration
-        public PasswordManager(String plainPassword)
+        public PasswordManager(string plainPassword)
         {
             this.plainPassword = plainPassword;
-            this.salt = Convert.ToHexString(RandomNumberGenerator.GetBytes(keySize));
-            this.computedHashedPassword = HashPassword();
+            salt = Convert.ToHexString(RandomNumberGenerator.GetBytes(keySize));
+            computedHashedPassword = HashPassword();
         }
 
         //this constructor is used for login
-        public PasswordManager(String plainPassword, String salt)
+        public PasswordManager(string plainPassword, string salt)
         {
             this.plainPassword = plainPassword;
             this.salt = salt;
-            this.computedHashedPassword = HashPassword();
+            computedHashedPassword = HashPassword();
         }
 
         private string HashPassword()
-        {  
+        {
             byte[] hashedPassword = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(plainPassword),
                                                     Convert.FromHexString(salt),
                                                     iterations,

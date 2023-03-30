@@ -7,7 +7,7 @@ namespace RegistrationForEuvic.Models.DTOs
 {
     public class RegisterDto
     {
-        [Required(AllowEmptyStrings = false)]
+        [Required]
         [NameLikeValue]
         [StringLength(50)]
         [Unicode(false)]

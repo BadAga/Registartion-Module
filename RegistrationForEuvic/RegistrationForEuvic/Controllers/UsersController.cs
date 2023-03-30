@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RegistrationForEuvic.Managers;
 using RegistrationForEuvic.Models;
 using RegistrationForEuvic.Models.DTOs;
 using RegistrationForEuvic.Models.Mappers;
-using RegistrationForEuvic.Models.Password_Manager;
 
 namespace RegistrationForEuvic.Controllers
 {
@@ -120,13 +120,13 @@ namespace RegistrationForEuvic.Controllers
             _userDto.Password = passManager.ComputedHashedPassword;
 
             //phone numbers are stored in db WITHOUT seperators
-            _userDto.PhoneNumber = UserInputFormater.FormatToNoSepartorNumber(_userDto.PhoneNumber, ' ', '-');
+            _userDto.PhoneNumber = UserInputManager.FormatToNoSepartorNumber(_userDto.PhoneNumber, ' ', '-');
 
             //get the age
-            int computedAge= UserInputFormater.GetAgeBasedOnPesel(_userDto.Pesel);
+            int computedAge= UserInputManager.GetAgeBasedOnPesel(_userDto.Pesel);
 
             //get formated power usage
-            _userDto.PowerUsageAvg = UserInputFormater.FormatPowerUsage(_userDto.PowerUsageAvg);
+            _userDto.PowerUsageAvg =UserInputManager.FormatPowerUsage(_userDto.PowerUsageAvg);
 
             if(_userDto.Age!=computedAge)
             {

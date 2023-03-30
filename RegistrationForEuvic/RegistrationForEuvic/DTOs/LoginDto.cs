@@ -13,7 +13,7 @@ namespace RegistrationForEuvic.Models.DTOs
         public string Email { get; set; } = null!;
 
         [Required]
-        [StringLength(50)]
+        [StringLength(40)]
         [Unicode(false)]
         public string Password { get; set; } = null!;       
     }
